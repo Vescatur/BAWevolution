@@ -23,8 +23,8 @@ namespace BAWsurvival
         Random randonGen = new Random();
         private Rectangle[,] map;
         private SolidColorBrush[,] colorMap;
-        private SolidColorBrush BackgroundColor;
-        public int FramesPerTick;
+        public SolidColorBrush BackgroundColor;
+        public Grid grid;
 
         public void Initialize ()
         {
@@ -40,39 +40,24 @@ namespace BAWsurvival
                     CreatePixel(x, y, Colors.Blue);
                 }
             }
+            UpdateScreen(0);
         }
 
-        public void RandomColor()
+        internal void UpdateScreen(float frame)
         {
+            byte BackColor = (byte)(Math.Abs(Math.Sin(frame * 2 * (float)Math.PI) * 126 + 126));
+            ChangeBackground(Color.FromArgb(255, BackColor, BackColor, BackColor));
+
             for (int x = 0; x < xSize; x++)
             {
                 for (int y = 0; y < ySize; y++)
                 {
-                    byte randomNumber = (byte)randonGen.Next(255);
-                    ChangePixel(x, y, Color.FromArgb(255, randomNumber, randomNumber, randomNumber));
+                    Coordinate coord = new Coordinate();
+                    coord.x = x;
+                    coord.y = y;
+                    colorMap[x,y].Color = grid.GetCell(coord).GetColor(frame);
                 }
             }
-        }
-
-        internal void UpdateScreen(int frameNumber)
-        {
-            float a = (float) frameNumber / (float)FramesPerTick;
-            float b = a * 2 * (float) Math.PI;
-            float c = (float)Math.Sin(b);
-            byte d = (byte) (c * 126 + 255);
-            byte BackColor = d;
-            ChangeBackground(Color.FromArgb(255, BackColor, BackColor, BackColor));
-        }
-
-        internal Color GetColorCell(Coordinate coord)
-        {
-            return colorMap[coord.x, coord.y].Color;
-        }
-
-        public void RandomColorPixel(Coordinate coord)
-        {
-            byte randomNumber = (byte)randonGen.Next(255);
-            ChangePixel(coord.x, coord.y, Color.FromArgb(255, randomNumber, randomNumber, randomNumber));
         }
 
         public void CreatePixel(int x, int y,Color color)

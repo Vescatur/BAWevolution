@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,37 +24,44 @@ namespace BAWsurvival
         public int DeathsPerTick;
         public int CellsPerSelection;
         public int FramesPerTick;
-        public int FrameNumber = 0;
-        public bool Animate = true;
-
+        public Grid grid;
 
         public void Tick()
         {
-            for (int i = 0; i < FramesPerTick; i++)
+            for(int i = 0;i<DeathsPerTick;i++)
             {
-                Frame();
+                Cell[] cells = map.GetRandomCellArray(CellsPerSelection);
+                Cell WorstCell = map.GetWorstCell(cells);
+                map.CellDie(WorstCell);
+                canvasRender.UpdateScreen(0);
             }
         }
-
-        public void Frame()
+        
+        public void Animate()
         {
-            if (Animate == true)
-            {
-                canvasRender.UpdateScreen(FrameNumber);
-            }
+                Frame(0);
+        }
 
-            for (int i = 0; i < DeathsPerTick; i++)
-            {
 
-                Coordinate[] coordList = map.getRandomCellArray(CellsPerSelection);
-                Coordinate WorstCell = map.getWorst(coordList);
-                map.CellDie(WorstCell);
-            }
-            if (FrameNumber >= FramesPerTick)
+        public void Frame(int FrameNumber)
+        {
+            var backgroundWorker = new BackgroundWorker();
+
+            backgroundWorker.DoWork += (s, e) => {
+                Thread.Sleep(50);
+            };
+
+            backgroundWorker.RunWorkerCompleted += (s, e) =>
             {
-                FrameNumber = 0;
-            }
-            FrameNumber++;
+                canvasRender.UpdateScreen((float)FrameNumber/ (float)FramesPerTick);
+                FrameNumber++;
+                if (FrameNumber <FramesPerTick)
+                {
+                    Frame(FrameNumber);
+                }
+            };
+
+            backgroundWorker.RunWorkerAsync();
         }
 
     }

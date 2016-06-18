@@ -15,66 +15,55 @@ using System.Windows.Shapes;
 
 namespace BAWsurvival
 {
-
-
-
     class Map
     {
         Random randonGen = new Random();
         public int xSize;
         public int ySize;
         public CanvasRender canvasRender;
-        public Color Backgroundcolor;
+        public SolidColorBrush Backgroundcolor;
+        public Grid grid;
 
-        internal void CellDie(Coordinate coord)
+        internal void CellDie(Cell cell)
         {
-            Coordinate coordN = getRandomCell();
-            canvasRender.ChangePixel(coord.x,coord.y,canvasRender.GetColorCell(coordN));
+            cell.score = GetRandomCell().score;
         }
 
-        internal Coordinate getRandomCell()
+        public Cell GetRandomCell()
         {
             Coordinate coord = new Coordinate();
-            coord.x = Math.Abs(randonGen.Next(xSize-1) + randonGen.Next(xSize-1) - xSize+1);
-            Console.Write(coord.x);
-            coord.y = randonGen.Next(ySize) ;
-            return coord;
+            coord.x = randonGen.Next(xSize);
+            coord.y = randonGen.Next(ySize);
+            return grid.GetCell(coord);
         }
 
-        internal int getCellScore(Coordinate coord)
+        public Cell[] GetRandomCellArray(int size)
         {
-            Color color = canvasRender.GetColorCell(coord);
-            int score = Math.Abs(color.R - Backgroundcolor.R) + Math.Abs(color.B - Backgroundcolor.B) + Math.Abs(color.G - Backgroundcolor.G);
-            return score;
-        }
-
-        internal Coordinate getWorst(Coordinate[] coordList)
-        {
-            Coordinate coord = coordList[0];
-            for (int i = 1;i<coordList.Length;i++)
+            Cell[] cells = new Cell[size];
+            for (int i = 0; i < size; i++)
             {
-                if (getCellScore(coord) < getCellScore(coordList[i]))
+                cells[i] = GetRandomCell();
+            }
+            return cells;
+        }
+
+        public Cell GetBestCell(Cell[] cells)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Cell GetWorstCell(Cell[] cells)
+        {
+            Cell cell = cells[0];
+            for (int i = 1; i < cells.Length; i++)
+            {
+                if (cell.score > cells[i].score)
                 {
-                    coord = coordList[i];
+                    cell = cells[i];
                 }
             }
 
-            return coord;
+            return cell;
         }
-
-
-        internal Coordinate[] getRandomCellArray(int Size)
-        {
-            Coordinate[] coordList = new Coordinate[Size];
-            for (int i = 0; i < Size; i++)
-            {
-                coordList[i] = getRandomCell();
-            }
-            return coordList;
-        }
-
-
-
-
     }
 }
