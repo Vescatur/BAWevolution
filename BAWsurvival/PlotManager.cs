@@ -11,34 +11,68 @@ namespace BAWsurvival
 
     using System.Collections.Generic;
     using OxyPlot.Wpf;
-    using OxyPlot;
+
 
 
     class PlotManager
     {
-        Plot plotModel;
+        Plot plotModelScore;
+        Plot plotModelTime;
+        public int NumberOfLines;
 
-        public void Initialize (Plot plot)
+        public void Initialize (Plot plotScore,Plot plotScoreTime)
         {
-            plotModel = plot;
+
+            plotModelScore = plotScore;
+            plotModelTime = plotScoreTime;
+            Lines = plotModelScore.Series;
+            DataPointList = new List<List<DataPoint>>();
+
+            for (int i = 0; i<NumberOfLines;i++)
+            {
+                LineSeries line = new LineSeries();
+                line.Name = "line" + i.ToString();
+                DataPointList.Add(new List<DataPoint>());
+                line.ItemsSource = DataPointList[i];
+                Lines.Add(line);
+               
+            }
+
+
         }
 
         public PlotManager()
         {
             this.Title = "Score";
-            this.Points = new List<DataPoint>
-                              {
-                              };
-        }
+            this.PointsTime = new List<DataPoint>();
 
-        public string Title { get; private set; }
+    }
 
-        public IList<DataPoint> Points { get; private set; }
+    public string Title { get; private set; }
 
-        public void Tick(int generation,float average)
+        public IList<Series> Lines { get; private set; }
+
+        public List<List<DataPoint>> DataPointList;
+
+        public IList<DataPoint> PointsTime { get; private set; }
+
+
+        public void Tick(int generation,float[] data,float[] dataTime)
         {
-            this.Points.Add(new DataPoint(generation,average));
-            plotModel.InvalidatePlot(true);
+            PointsTime.Clear();
+
+            for (int i = 0; i < 100; i++)
+            {
+                PointsTime.Add(new DataPoint(i, dataTime[i]));
+            }
+
+
+            for (int i = 0; i < NumberOfLines; i++)
+            {
+                DataPointList[i].Add(new DataPoint(generation,(130-data[i])* (130 - data[i])));
+            }
+            plotModelTime.InvalidatePlot(true);
+            plotModelScore.InvalidatePlot(true);
         }
     }
 }

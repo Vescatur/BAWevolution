@@ -57,7 +57,7 @@ namespace BAWsurvival
 
             evolution.DeathsPerTick = 20;
             evolution.FramesPerTick = 120;
-            evolution.CellsPerSelection = 20;
+            evolution.CellsPerSelection = 10;
 
 
             evolution.map = map;
@@ -72,14 +72,15 @@ namespace BAWsurvival
             canvasRender.Initialize();
             canvasRender.ChangeBackground(Colors.White);
             map.Initialize(randomGen);
-            plotManager.Initialize(myPlot);
+            plotManager.NumberOfLines = 7;
+            plotManager.Initialize(myPlot,myPlotTime);
         }
 
         private void NewTick_Click(object sender, RoutedEventArgs e)
         {
             evolution.Tick();
             generationCounter += 1;
-            plotManager.Tick(generationCounter, evolution.average());
+            plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines),map.GetScoreTime());
         }
 
         private void ShowAnimation_Click(object sender, RoutedEventArgs e)
@@ -89,7 +90,12 @@ namespace BAWsurvival
 
         private void testButton_Click(object sender, RoutedEventArgs e)
         {
-
+            for (int i = 0; i<50;i++)
+            {
+                evolution.Tick();
+                generationCounter += 1;
+                plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines),map.GetScoreTime());
+            }
         }
     }
 }

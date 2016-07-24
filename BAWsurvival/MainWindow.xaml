@@ -24,13 +24,18 @@
         <Button x:Name="NewTick" Content="New tick" HorizontalAlignment="Left" Margin="16,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="91" Click="NewTick_Click" Height="22"/>
         <Button x:Name="ShowAnimation" Content="Show animation" HorizontalAlignment="Left" Margin="16,37,0,0" Grid.Row="1" VerticalAlignment="Top" Width="91" Click="ShowAnimation_Click" Height="22"/>
         <Button x:Name="testButton" Content="test" HorizontalAlignment="Left" Margin="154,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="74" Click="testButton_Click"/>
-        <oxy:Plot x:Name="myPlot" Title="{Binding Title}" Margin="10" Grid.Column="2">
-            <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding Points}"/>
-            </oxy:Plot.Series>
+        <oxy:Plot x:Name="myPlot"  Title= "Score Per Generation"   Margin="10" Grid.Column="2">
             <oxy:Plot.Axes>
-                <oxy:LinearAxis Position="Left" Minimum="0" Maximum="131" />
+                <oxy:LinearAxis Position="Left" Minimum="0"/>
             </oxy:Plot.Axes>
+        </oxy:Plot>
+        <oxy:Plot x:Name="myPlotTime"  Title= "Score Over Time"   Margin="10" Grid.Column="2" Grid.Row="1">
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis Position="Left" Minimum="0"/>
+            </oxy:Plot.Axes>
+            <oxy:Plot.Series>
+                <oxy:LineSeries ItemsSource="{Binding PointsTime}"/>
+            </oxy:Plot.Series>
         </oxy:Plot>
     </Grid>
 </Window>

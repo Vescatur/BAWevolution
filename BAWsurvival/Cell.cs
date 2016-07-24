@@ -28,7 +28,7 @@ namespace BAWsurvival
         {
             x = Tx;
             y = Ty;
-            int NumberPoints = randomGen.Next(4)+2;
+            int NumberPoints = randomGen.Next(5)+2;
             PointList = new Point[NumberPoints];
 
 
@@ -50,6 +50,7 @@ namespace BAWsurvival
             {
                 score += Math.Abs(GetScreenValue(frame) - GetBlue(frame));
             }
+
             score = score / 100;
         }
 

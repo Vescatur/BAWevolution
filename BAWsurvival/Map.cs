@@ -48,21 +48,26 @@ namespace BAWsurvival
             }
             cell.PointList = PointList;
 
-            if (randomGen.Next(30) == 0)
+            if (randomGen.Next(2) == 0)
             {
                 int spread = randomGen.Next(0,25)/5;
                 if (spread == 0)
                 {
                     spread = 50;
                 }
-                for (int i = 0; i < PointList.Length; i++)
+                for (int i = 0; i < randomGen.Next(2,8); i++)
                 {
-                    PointList[i].waarde = (byte) Math.Min(Math.Max(PointList[i].waarde + (randomGen.Next(0, spread)-2.5),0),255);
+                    int cellNum = randomGen.Next(0, PointList.Length-1);
+                    PointList[cellNum].waarde = (byte) Math.Min(Math.Max(PointList[cellNum].waarde + (randomGen.Next(0, spread)- spread/2),0),255);
                 }
 
-                for (int i = 2; i < PointList.Length; i++)
+                if (PointList.Length > 2)
                 {
-                    PointList[i].frame = (float)Math.Min(Math.Max(PointList[i].frame + randomGen.Next(0, spread)/250 - 0.01, 0f), 1f);
+                    for (int i = 0; i < randomGen.Next(2, 8); i++)
+                    {
+                        int cellNum = randomGen.Next(1, PointList.Length - 2);
+                        PointList[cellNum].frame = (float)Math.Min(Math.Max(PointList[cellNum].frame + (randomGen.Next(0, spread) - spread / 2) / 100, 0f), 1f);
+                    }
                 }
 
                 cell.CalculateScore();
@@ -75,6 +80,25 @@ namespace BAWsurvival
 
         }
 
+        internal float[] GetScoreTime()
+        {
+            float[] scores = new float[100];
+
+            for(float i = 0; i<=1;i+=0.01f)
+            {
+                float score = 0;
+                for(int b = 0; b<xSize*ySize;b++)
+                {
+                    int x = (int) Math.Floor((float)b / (float)ySize);
+                    int y = b - (x * ySize);
+
+                    score += Math.Abs(grid.grid[0,0].GetScreenValue(i) - grid.grid[x,y].GetBlue(i));
+                }
+                scores[(int)(i*100)] = score / (float) (xSize * ySize);
+            }
+            return scores;
+        }
+
         public Cell GetRandomCell()
         {
             Coordinate coord = new Coordinate();
@@ -82,6 +106,24 @@ namespace BAWsurvival
             coord.y = randomGen.Next(ySize);
             return grid.GetCell(coord);
         }
+
+        internal float[] GetMedianValues(int numberOfLines)
+        {
+            float[] lineData = new float[numberOfLines];
+            float[] score = grid.GetAllScore();
+            Array.Sort(score);
+            for (int i = 0; i< numberOfLines;i++)
+            {
+                float precentage = (float) i / (float) numberOfLines;
+                float DataPointIndex = precentage  * (float)xSize * (float)ySize;
+                int RoundedDataPoint = (int)Math.Ceiling(DataPointIndex);
+
+                lineData[i] = score[RoundedDataPoint];
+            }
+            return lineData;
+        }
+
+
 
         public Cell[] GetRandomCellArray(int size)
         {

@@ -44,5 +44,18 @@ namespace BAWsurvival
             }
             return avg/xSize/ySize;
         }
+
+        internal float[] GetAllScore()
+        {
+            float[] scores = new float[xSize * ySize];
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                    scores[x*ySize+y] = grid[x, y].score;
+                }
+            }
+            return scores;
+        }
     }
 }
