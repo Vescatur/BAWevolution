@@ -20,7 +20,6 @@ namespace BAWsurvival
         public Canvas myCanvas;
         public int xSize;
         public int ySize;
-        Random randonGen = new Random();
         private Rectangle[,] map;
         private SolidColorBrush[,] colorMap;
         public SolidColorBrush BackgroundColor;
@@ -40,7 +39,7 @@ namespace BAWsurvival
                     CreatePixel(x, y, Colors.Blue);
                 }
             }
-            UpdateScreen(0);
+            UpdateScreen(0.2f);
         }
 
         internal void UpdateScreen(float frame)

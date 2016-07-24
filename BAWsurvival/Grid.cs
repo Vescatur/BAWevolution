@@ -11,9 +11,8 @@ namespace BAWsurvival
         public int xSize;
         public int ySize;
         public Cell[,] grid;
-        Random randonGen = new Random();
 
-        public void Initialize()
+        public void Initialize(Random randomGen)
         {
             grid = new Cell[xSize, ySize];
             for(int x = 0; x<xSize;x++)
@@ -21,7 +20,7 @@ namespace BAWsurvival
                 for(int y = 0; y < ySize; y++)
                 {
                     grid[x, y] = new Cell();
-                    grid[x, y].Initialize(x, y, randonGen.Next(255));
+                    grid[x, y].Initialize(x, y,randomGen);
                 }
             }
         }
@@ -31,6 +30,17 @@ namespace BAWsurvival
             return grid[coordinate.x, coordinate.y];
         }
 
-        
+        public float average()
+        {
+            float avg = 0;
+            for (int x = 0; x < xSize; x++)
+            {
+                for (int y = 0; y < ySize; y++)
+                {
+                   avg += (float)grid[x, y].score;
+                }
+            }
+            return avg/xSize/ySize;
+        }
     }
 }

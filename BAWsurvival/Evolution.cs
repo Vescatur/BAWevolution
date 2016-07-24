@@ -64,5 +64,9 @@ namespace BAWsurvival
             backgroundWorker.RunWorkerAsync();
         }
 
+        public float average()
+        {
+            return grid.average();
+        }
     }
 }

@@ -17,28 +17,99 @@ namespace BAWsurvival
 {
     class Cell
     {
-        public int score;
+        public float score;
         int x;
         int y;
+        public Point[] PointList;
 
 
 
-        public void Initialize (int Tx,int Ty,int Tscore)
+        public void Initialize (int Tx,int Ty,Random randomGen)
         {
             x = Tx;
             y = Ty;
-            score = Tscore;
+            int NumberPoints = randomGen.Next(4)+2;
+            PointList = new Point[NumberPoints];
+
+            for (int i = 0; i<NumberPoints;i++)
+            {
+                PointList[i] = RandomPoint(randomGen);
+            }
+
+            PointList[0].frame = 0;
+            PointList[1].frame = 1;
+
+            CalculateScore();
+        }
+
+        public void CalculateScore()
+        {
+            score = 0;
+            for (float frame = 0; frame <= 1; frame += 0.01f)
+            {
+                score += Math.Abs(GetScreenValue(frame) - GetBlue(frame));
+            }
+            score = score / 100;
+        }
+
+
+        public float GetScreenValue(float frame)
+        {
+            return (float) (Math.Abs(Math.Sin(frame * 2 * (float)Math.PI) * 126 + 126));
+        }
+
+        public Point RandomPoint(Random randonGen)
+        {
+            Point point = new Point();
+            point.frame = (float)randonGen.Next(100) / 100;
+            point.waarde = (byte)randonGen.Next(255);
+
+            return point;
         }
 
         public Color GetColor(float Frame)
         {
-            byte b = GetB(Frame);
-            return Color.FromRgb(b, b, b); 
+            byte b = GetBlue(Frame);
+            return Color.FromRgb(b, b, b);
         }
 
-        public byte GetB(float Frame)
+        public byte GetBlue(float Frame)
         {
-            return (byte)score;
+            Point Onder = PointList[0];
+            Point Boven = PointList[0];
+            for (int i = 1; i < PointList.Length; i++)
+            {
+
+
+                if (Frame - Onder.frame > Frame - PointList[i].frame | Onder.frame > Frame)
+                {
+                    if (PointList[i].frame < Frame)
+                    {
+                        Onder = PointList[i];
+                    }
+                }
+                if (Boven.frame - Frame > PointList[i].frame - Frame | Boven.frame < Frame)
+                {
+                    if (PointList[i].frame > Frame)
+                    {
+                        Boven = PointList[i];
+                    }
+                }
+            }
+
+            float start = Onder.waarde;
+            float verschil = Boven.waarde - Onder.waarde;
+
+            float afstand = (Frame - Onder.frame) / (Boven.frame - Onder.frame);
+
+            if (Boven.frame == Onder.frame)
+            {
+                afstand = 0;
+            }
+            
+
+            byte color = (byte)Math.Round(start + verschil * afstand);
+            return color;
         }
 
     }

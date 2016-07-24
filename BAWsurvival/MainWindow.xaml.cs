@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using OxyPlot;
+using OxyPlot.Series;
 
 namespace BAWsurvival
 {
@@ -22,19 +24,25 @@ namespace BAWsurvival
         Map map;
         Evolution evolution;
         Grid grid;
+        Random randomGen = new Random();
 
         int xSize = 25;
         int ySize = 13;
+        int generationCounter;
+
+        public string Title { get; private set; }
+
+        public IList<DataPoint> Points { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
+            generationCounter = 0;
             grid = new Grid();
             canvasRender = new CanvasRender();
             map = new Map();
             evolution = new Evolution();
-
 
             grid.xSize = xSize;
             grid.ySize = ySize;
@@ -48,8 +56,8 @@ namespace BAWsurvival
             map.Backgroundcolor = canvasRender.BackgroundColor;
 
             evolution.DeathsPerTick = 20;
-            evolution.FramesPerTick = 100;
-            evolution.CellsPerSelection = 5;
+            evolution.FramesPerTick = 120;
+            evolution.CellsPerSelection = 20;
 
 
             evolution.map = map;
@@ -60,20 +68,28 @@ namespace BAWsurvival
             canvasRender.grid = grid;
 
 
-            grid.Initialize();
+            grid.Initialize(randomGen);
             canvasRender.Initialize();
             canvasRender.ChangeBackground(Colors.White);
-
+            map.Initialize(randomGen);
+            plotManager.Initialize(myPlot);
         }
 
         private void NewTick_Click(object sender, RoutedEventArgs e)
         {
             evolution.Tick();
+            generationCounter += 1;
+            plotManager.Tick(generationCounter, evolution.average());
         }
 
         private void ShowAnimation_Click(object sender, RoutedEventArgs e)
         {
             evolution.Animate();
+        }
+
+        private void testButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
