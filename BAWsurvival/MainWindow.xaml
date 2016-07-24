@@ -28,6 +28,9 @@
             <oxy:Plot.Series>
                 <oxy:LineSeries ItemsSource="{Binding Points}"/>
             </oxy:Plot.Series>
+            <oxy:Plot.Axes>
+                <oxy:LinearAxis Position="Left" Minimum="0" Maximum="131" />
+            </oxy:Plot.Axes>
         </oxy:Plot>
     </Grid>
 </Window>

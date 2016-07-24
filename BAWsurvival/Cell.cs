@@ -31,6 +31,7 @@ namespace BAWsurvival
             int NumberPoints = randomGen.Next(4)+2;
             PointList = new Point[NumberPoints];
 
+
             for (int i = 0; i<NumberPoints;i++)
             {
                 PointList[i] = RandomPoint(randomGen);

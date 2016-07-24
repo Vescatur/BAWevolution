@@ -29,7 +29,6 @@ namespace BAWsurvival
             this.Points = new List<DataPoint>
                               {
                               };
-            
         }
 
         public string Title { get; private set; }
@@ -39,7 +38,7 @@ namespace BAWsurvival
         public void Tick(int generation,float average)
         {
             this.Points.Add(new DataPoint(generation,average));
-            plotModel.InvalidatePlot(true); 
+            plotModel.InvalidatePlot(true);
         }
     }
 }

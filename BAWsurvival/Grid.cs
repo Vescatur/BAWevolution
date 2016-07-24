@@ -23,6 +23,8 @@ namespace BAWsurvival
                     grid[x, y].Initialize(x, y,randomGen);
                 }
             }
+
+
         }
 
         public Cell GetCell (Coordinate coordinate)
