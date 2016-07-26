@@ -33,9 +33,6 @@
             <oxy:Plot.Axes>
                 <oxy:LinearAxis Position="Left" Minimum="0"/>
             </oxy:Plot.Axes>
-            <oxy:Plot.Series>
-                <oxy:LineSeries ItemsSource="{Binding PointsTime}"/>
-            </oxy:Plot.Series>
         </oxy:Plot>
     </Grid>
 </Window>

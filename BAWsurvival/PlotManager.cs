@@ -26,7 +26,10 @@ namespace BAWsurvival
             plotModelScore = plotScore;
             plotModelTime = plotScoreTime;
             Lines = plotModelScore.Series;
+            LinesTime = plotModelTime.Series;
+
             DataPointList = new List<List<DataPoint>>();
+            PointsTime = new List<List<DataPoint>>();
 
             for (int i = 0; i<NumberOfLines;i++)
             {
@@ -38,41 +41,82 @@ namespace BAWsurvival
                
             }
 
-
+            for (int i = 0; i < 4; i++)
+            {
+                LineSeries line = new LineSeries();
+                line.Name = "line" + i.ToString();
+                PointsTime.Add(new List<DataPoint>());
+                line.ItemsSource = PointsTime[i];
+                LinesTime.Add(line);
+            }
         }
 
         public PlotManager()
         {
             this.Title = "Score";
-            this.PointsTime = new List<DataPoint>();
-
     }
 
     public string Title { get; private set; }
 
         public IList<Series> Lines { get; private set; }
 
+        public IList<Series> LinesTime { get; private set; }
+
         public List<List<DataPoint>> DataPointList;
 
-        public IList<DataPoint> PointsTime { get; private set; }
+        public List<List<DataPoint>> PointsTime;
 
 
-        public void Tick(int generation,float[] data,float[] dataTime)
+        public void Tick(int generation,float[] data)
         {
-            PointsTime.Clear();
-
-            for (int i = 0; i < 100; i++)
-            {
-                PointsTime.Add(new DataPoint(i, dataTime[i]));
-            }
-
-
             for (int i = 0; i < NumberOfLines; i++)
             {
                 DataPointList[i].Add(new DataPoint(generation,(130-data[i])* (130 - data[i])));
             }
-            plotModelTime.InvalidatePlot(true);
             plotModelScore.InvalidatePlot(true);
+        }
+
+        public void UpdateTimeScore(Cell cell)
+        {
+            PointsTime[0].Clear();
+            PointsTime[1].Clear();
+            PointsTime[2].Clear();
+            PointsTime[3].Clear();
+
+            for (int i = 0; i < 101; i++)
+            {
+                PointsTime[0].Add(new DataPoint(i, cell.GetBlue((float)i/100)));
+            }
+
+            for (int i = 0; i < 101; i++)
+            {
+                PointsTime[1].Add(new DataPoint(i, cell.GetScreenValue((float)i / 100)));
+            }
+            Comparison<Point> comparison = (x, y) => (int) ( ComparePoint(x,y));
+            cell.PointList.Sort(comparison);
+
+            for (int i = 0; i < cell.PointList.Count; i++)
+            {
+                PointsTime[2].Add(new DataPoint(cell.PointList[i].frame*100, cell.PointList[i].waarde));
+            }
+
+            plotModelTime.InvalidatePlot(true);
+        }
+
+        public int ComparePoint( Point x, Point y) 
+        {
+            if (x.frame == y.frame)
+            {
+                return 0;
+            }
+            else if (x.frame >= y.frame)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         }
     }
 }

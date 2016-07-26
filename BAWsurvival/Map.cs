@@ -36,15 +36,14 @@ namespace BAWsurvival
             
             
                    
-            Point[] NPointList = NCell.PointList;
-
-            Point[] PointList = new Point[NPointList.Length];
-            for(int i =0;i< PointList.Length;i++)
+            List<Point> NPointList = NCell.PointList;
+            List<Point> PointList = new List<Point>();
+            for(int i =0;i< NPointList.Count;i++)
             {
                 Point p = new Point();
                 p.frame = NPointList[i].frame;
                 p.waarde = NPointList[i].waarde;
-                PointList[i] = p;
+                PointList.Add(p);
             }
             cell.PointList = PointList;
 
@@ -55,19 +54,16 @@ namespace BAWsurvival
                 {
                     spread = 50;
                 }
-                for (int i = 0; i < randomGen.Next(2,8); i++)
+                for (int i = 0; i < randomGen.Next(0,8); i++)
                 {
-                    int cellNum = randomGen.Next(0, PointList.Length-1);
+                    int cellNum = randomGen.Next(0, PointList.Count-1);
                     PointList[cellNum].waarde = (byte) Math.Min(Math.Max(PointList[cellNum].waarde + (randomGen.Next(0, spread)- spread/2),0),255);
                 }
 
-                if (PointList.Length > 2)
+                for (int i = 0; i < randomGen.Next(2, 8); i++)
                 {
-                    for (int i = 0; i < randomGen.Next(2, 8); i++)
-                    {
-                        int cellNum = randomGen.Next(1, PointList.Length - 2);
-                        PointList[cellNum].frame = (float)Math.Min(Math.Max(PointList[cellNum].frame + (randomGen.Next(0, spread) - spread / 2) / 100, 0f), 1f);
-                    }
+                    int cellNum = randomGen.Next(1, PointList.Count - 2);
+                    PointList[cellNum].frame = (float)Math.Min(Math.Max(PointList[cellNum].frame + (randomGen.Next(0, spread) - spread / 2) / 100, 0f), 1f);
                 }
 
                 cell.CalculateScore();

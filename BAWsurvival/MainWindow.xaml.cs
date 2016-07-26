@@ -80,7 +80,8 @@ namespace BAWsurvival
         {
             evolution.Tick();
             generationCounter += 1;
-            plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines),map.GetScoreTime());
+            plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines));
+            plotManager.UpdateTimeScore(grid.grid[randomGen.Next(0,xSize-1),randomGen.Next(0,ySize-1)]);
         }
 
         private void ShowAnimation_Click(object sender, RoutedEventArgs e)
@@ -94,7 +95,7 @@ namespace BAWsurvival
             {
                 evolution.Tick();
                 generationCounter += 1;
-                plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines),map.GetScoreTime());
+                plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines));
             }
         }
     }

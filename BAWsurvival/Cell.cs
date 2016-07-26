@@ -20,7 +20,7 @@ namespace BAWsurvival
         public float score;
         int x;
         int y;
-        public Point[] PointList;
+        public List<Point> PointList;
 
 
 
@@ -28,13 +28,13 @@ namespace BAWsurvival
         {
             x = Tx;
             y = Ty;
-            int NumberPoints = randomGen.Next(5)+2;
-            PointList = new Point[NumberPoints];
+            int NumberPoints = randomGen.Next(5)+3;
+            PointList = new List<Point>();
 
 
             for (int i = 0; i<NumberPoints;i++)
             {
-                PointList[i] = RandomPoint(randomGen);
+                PointList.Add(RandomPoint(randomGen));
             }
 
             PointList[0].frame = 0;
@@ -79,20 +79,20 @@ namespace BAWsurvival
         {
             Point Onder = PointList[0];
             Point Boven = PointList[0];
-            for (int i = 1; i < PointList.Length; i++)
+            for (int i = 1; i < PointList.Count; i++)
             {
 
 
                 if (Frame - Onder.frame > Frame - PointList[i].frame | Onder.frame > Frame)
                 {
-                    if (PointList[i].frame < Frame)
+                    if (PointList[i].frame <= Frame)
                     {
                         Onder = PointList[i];
                     }
                 }
                 if (Boven.frame - Frame > PointList[i].frame - Frame | Boven.frame < Frame)
                 {
-                    if (PointList[i].frame > Frame)
+                    if (PointList[i].frame >= Frame)
                     {
                         Boven = PointList[i];
                     }

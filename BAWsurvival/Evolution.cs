@@ -33,8 +33,8 @@ namespace BAWsurvival
                 Cell[] cells = map.GetRandomCellArray(CellsPerSelection);
                 Cell WorstCell = map.GetWorstCell(cells);
                 map.CellDie(WorstCell);
-                canvasRender.UpdateScreen(0);
             }
+            canvasRender.UpdateScreen(0);
         }
         
         public void Animate()
