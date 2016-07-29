@@ -47,31 +47,49 @@ namespace BAWsurvival
             }
             cell.PointList = PointList;
 
-            if (randomGen.Next(2) == 0)
+            int SizeSpread = randomGen.Next(0, 5);
+
+
+            int spread;
+
+            if (SizeSpread == 0 || SizeSpread == 1)
             {
-                int spread = randomGen.Next(0,25)/5;
-                if (spread == 0)
+                spread = 25;
+            }
+            else if (SizeSpread == 2)
+            {
+                spread = 100;
+            }
+            else 
+            {
+                spread = 5;
+            }
+
+            for (int i = 0; i < PointList.Count; i++)
+            {
+                if (randomGen.Next(3) == 0 )
                 {
-                    spread = 50;
+                    PointList[i].waarde = (byte)Math.Min(Math.Max(PointList[i].waarde + (randomGen.Next(0, spread) - spread / 2), 0), 255);
                 }
-                for (int i = 0; i < randomGen.Next(0,8); i++)
+            }
+
+            for (int i = 1; i < PointList.Count-1; i++)
+            {
+                
+               
+                if (randomGen.Next(3) == 0)
                 {
-                    int cellNum = randomGen.Next(0, PointList.Count-1);
-                    PointList[cellNum].waarde = (byte) Math.Min(Math.Max(PointList[cellNum].waarde + (randomGen.Next(0, spread)- spread/2),0),255);
+                    PointList[i].frame = (float)Math.Min(Math.Max(PointList[i].frame + (randomGen.Next(0, spread) - spread / 2) / 100, 0f), 1f);
                 }
 
-                for (int i = 0; i < randomGen.Next(2, 8); i++)
+                if (PointList[i].frame == 100 || PointList[i].frame == 0)
                 {
-                    int cellNum = randomGen.Next(1, PointList.Count - 2);
-                    PointList[cellNum].frame = (float)Math.Min(Math.Max(PointList[cellNum].frame + (randomGen.Next(0, spread) - spread / 2) / 100, 0f), 1f);
+                    PointList[i].frame = (float)randomGen.Next(1000000) / 1000000;
                 }
+            }
 
-                cell.CalculateScore();
-            }
-            else
-            {
-                cell.score = NCell.score;
-            }
+            cell.CalculateScore();
+ 
 
 
         }
@@ -110,9 +128,9 @@ namespace BAWsurvival
             Array.Sort(score);
             for (int i = 0; i< numberOfLines;i++)
             {
-                float precentage = (float) i / (float) numberOfLines;
-                float DataPointIndex = precentage  * (float)xSize * (float)ySize;
-                int RoundedDataPoint = (int)Math.Ceiling(DataPointIndex);
+                float precentage = (float) i / (float) (numberOfLines-1);
+                float DataPointIndex = precentage  * ((float)xSize * (float)ySize-1);
+                int RoundedDataPoint = (int)Math.Round(DataPointIndex);
 
                 lineData[i] = score[RoundedDataPoint];
             }

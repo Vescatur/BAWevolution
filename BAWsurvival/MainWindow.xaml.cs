@@ -24,7 +24,7 @@ namespace BAWsurvival
         Map map;
         Evolution evolution;
         Grid grid;
-        Random randomGen = new Random();
+        public static Random randomGen = new Random();
 
         int xSize = 25;
         int ySize = 13;
@@ -58,7 +58,8 @@ namespace BAWsurvival
             evolution.DeathsPerTick = 20;
             evolution.FramesPerTick = 120;
             evolution.CellsPerSelection = 10;
-
+            evolution.xSize = xSize;
+            evolution.ySize = ySize;
 
             evolution.map = map;
             evolution.canvasRender = canvasRender;
@@ -72,7 +73,7 @@ namespace BAWsurvival
             canvasRender.Initialize();
             canvasRender.ChangeBackground(Colors.White);
             map.Initialize(randomGen);
-            plotManager.NumberOfLines = 7;
+            plotManager.NumberOfLines = 6;
             plotManager.Initialize(myPlot,myPlotTime);
         }
 
@@ -97,6 +98,7 @@ namespace BAWsurvival
                 generationCounter += 1;
                 plotManager.Tick(generationCounter, map.GetMedianValues(plotManager.NumberOfLines));
             }
+            plotManager.UpdateTimeScore(grid.grid[randomGen.Next(0, xSize - 1), randomGen.Next(0, ySize - 1)]);
         }
     }
 }

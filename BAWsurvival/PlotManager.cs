@@ -71,7 +71,7 @@ namespace BAWsurvival
         {
             for (int i = 0; i < NumberOfLines; i++)
             {
-                DataPointList[i].Add(new DataPoint(generation,(130-data[i])* (130 - data[i])));
+                DataPointList[i].Add(new DataPoint(generation,data[i]));
             }
             plotModelScore.InvalidatePlot(true);
         }

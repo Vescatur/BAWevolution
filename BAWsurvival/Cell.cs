@@ -29,6 +29,7 @@ namespace BAWsurvival
             x = Tx;
             y = Ty;
             int NumberPoints = randomGen.Next(5)+3;
+            NumberPoints = 7;
             PointList = new List<Point>();
 
 
@@ -63,7 +64,7 @@ namespace BAWsurvival
         public Point RandomPoint(Random randonGen)
         {
             Point point = new Point();
-            point.frame = (float)randonGen.Next(100) / 100;
+            point.frame = (float)randonGen.Next(1000000) / 1000000;
             point.waarde = (byte)randonGen.Next(255);
 
             return point;
@@ -113,6 +114,23 @@ namespace BAWsurvival
             byte color = (byte)Math.Round(start + verschil * afstand);
             return color;
         }
+
+        public static int CompareScore(Cell x, Cell y)
+        {
+            if (x.score == y.score)
+            {
+                return 0;
+            }
+            else if (x.score >= y.score)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
+        }
+
 
     }
 }

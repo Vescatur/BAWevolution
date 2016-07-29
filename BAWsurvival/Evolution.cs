@@ -24,16 +24,53 @@ namespace BAWsurvival
         public int DeathsPerTick;
         public int CellsPerSelection;
         public int FramesPerTick;
+        public int xSize;
+        public int ySize;
         public Grid grid;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Tick()
         {
-            for(int i = 0;i<DeathsPerTick;i++)
+            List<Cell> cellList = new List<Cell>();
+
+            for(int x = 0; x < xSize ; x++)
             {
-                Cell[] cells = map.GetRandomCellArray(CellsPerSelection);
-                Cell WorstCell = map.GetWorstCell(cells);
-                map.CellDie(WorstCell);
+                for (int y = 0; y < ySize; y++)
+                {
+                    cellList.Add(grid.grid[x,y]);
+                }
             }
+            Comparison<Cell> comparison = (x, y) => Cell.CompareScore(x, y);
+
+            cellList.Sort(comparison);
+            int NumberOfCells = cellList.Count;
+            //int CellsSquared = (int) Math.Floor(Math.Sqrt((float)NumberOfCells));
+
+            //for (int i = 0; i <CellsSquared; i++ )
+            //{
+            //    for(int o =0; (float)o<(float)i/2f;o++)
+            //    {
+            //        map.CellDie(cellList[CellsSquared * i + MainWindow.randomGen.Next(0, CellsSquared)]);
+            //    }
+            //}
+            //
+            //for (int i = CellsSquared^2; i<NumberOfCells;i++)
+            //{
+            //    map.CellDie(cellList[i]);
+            //}
+
+            for (int i = 0; (float)i < (float)NumberOfCells / 4f;i++)
+            {
+                map.CellDie(cellList[NumberOfCells - i - 1]);
+            }
+
+            for (int i = 0; (float)i < (float)NumberOfCells / 4f; i++)
+            {
+                map.CellDie(cellList[MainWindow.randomGen.Next(0,NumberOfCells)]);
+            }
+
             canvasRender.UpdateScreen(0);
         }
         
